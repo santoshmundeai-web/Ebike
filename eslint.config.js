@@ -39,7 +39,7 @@ export default tseslint.config(
   },
   {
     // Scripts and the logger's default sink may write to stdout.
-    files: ['packages/db/src/{migrate,seed}.ts', 'packages/shared/src/log.ts'],
+    files: ['packages/db/src/migrate.ts', 'apps/web/scripts/**', 'packages/shared/src/log.ts'],
     rules: { 'no-console': 'off' },
   },
   prettier,

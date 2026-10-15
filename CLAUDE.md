@@ -166,7 +166,9 @@ Before saying a task is done: `pnpm lint && pnpm typecheck && pnpm test` must pa
 - Never commit secrets. Config via environment variables, documented in `.env.example`.
 
 ### User guide after each phase
+
 When a phase is approved (its gate is passed), write a user guide for that phase before starting the next one.
+
 - Audience: showroom staff, not developers. Plain language, one section per role and per everyday task
   (e.g. "Create an invoice", "Open a job card"), step-by-step with a screenshot per step.
 - Screenshots are captured by a Playwright script (not by hand) so they can be regenerated when the UI changes:

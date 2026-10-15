@@ -6,6 +6,11 @@ import { z } from 'zod';
  */
 export const jobs = {
   'system.heartbeat': z.object({}),
+  /** Login OTP by SMS. Contains a secret: queued with a short expiry and deleted soon after. */
+  'auth.sendOtp': z.object({
+    phoneNumber: z.string().regex(/^\+91[6-9]\d{9}$/),
+    code: z.string().regex(/^\d{4,8}$/),
+  }),
 } as const;
 
 export type JobName = keyof typeof jobs;

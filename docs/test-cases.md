@@ -21,69 +21,69 @@ Rules that apply to every task, from [CLAUDE.md](../CLAUDE.md):
 
 ## 1.1 Project setup
 
-| ID        | Test case                                                           | Type             | Status               |
-| --------- | ------------------------------------------------------------------- | ---------------- | -------------------- |
-| TC-1.1-01 | A clean clone installs with `pnpm install` on Node 24 and pnpm 11   | Manual           | 👤                   |
-| TC-1.1-02 | `pnpm lint && pnpm typecheck && pnpm test` pass on `main`           | CI               | 📝                   |
-| TC-1.1-03 | A pull request with a failing check cannot be merged                | CI               | 📝                   |
-| TC-1.1-04 | `GET /api/v1/health` returns 200 `{status: ok, database: ok}`       | E2E              | 📝 (checked by hand) |
-| TC-1.1-05 | `GET /api/v1/health` returns 503 when the database is unreachable   | Integration      | 📝                   |
-| TC-1.1-06 | Merge to `main` deploys to staging; live deploy needs an approval   | Manual           | 👤                   |
-| TC-1.1-07 | `.env` is git-ignored and no secrets are in the repository          | CI (secret scan) | 📝                   |
-| TC-1.1-08 | Staging and live databases and file storage are in an Indian region | Manual           | 👤                   |
+| ID        | Test case                                                           | Type             | Status                                      |
+| --------- | ------------------------------------------------------------------- | ---------------- | ------------------------------------------- |
+| TC-1.1-01 | A clean clone installs with `pnpm install` on Node 24 and pnpm 11   | Manual           | 👤                                          |
+| TC-1.1-02 | `pnpm lint && pnpm typecheck && pnpm test` pass on `main`           | CI               | ✅ (CI workflow `.github/workflows/ci.yml`) |
+| TC-1.1-03 | A pull request with a failing check cannot be merged                | CI               | 📝                                          |
+| TC-1.1-04 | `GET /api/v1/health` returns 200 `{status: ok, database: ok}`       | E2E              | 📝 (checked by hand)                        |
+| TC-1.1-05 | `GET /api/v1/health` returns 503 when the database is unreachable   | Integration      | 📝                                          |
+| TC-1.1-06 | Merge to `main` deploys to staging; live deploy needs an approval   | Manual           | 👤                                          |
+| TC-1.1-07 | `.env` is git-ignored and no secrets are in the repository          | CI (secret scan) | 📝                                          |
+| TC-1.1-08 | Staging and live databases and file storage are in an Indian region | Manual           | 👤                                          |
 
 ## 1.2 Tenant and branch data model (SAAS-01, SAAS-02, NFR-06)
 
 Automated in [packages/db/src/tenant-isolation.test.ts](../packages/db/src/tenant-isolation.test.ts).
 
-| ID        | Test case                                                                                                            | Type              | Status |
-| --------- | -------------------------------------------------------------------------------------------------------------------- | ----------------- | ------ |
-| TC-1.2-01 | The app's database role is not a superuser and cannot bypass RLS                                                     | Integration       | ✅     |
-| TC-1.2-02 | With no tenant set, every tenant table returns zero rows                                                             | Integration       | ✅     |
-| TC-1.2-03 | Tenant A reads only its own rows in `tenants`, `branches`, `audit_log`                                               | Integration       | ✅     |
-| TC-1.2-04 | Tenant A cannot read tenant B's branch by id                                                                         | Integration       | ✅     |
-| TC-1.2-05 | Tenant A cannot update or delete tenant B's rows (0 rows affected, B unchanged)                                      | Integration       | ✅     |
-| TC-1.2-06 | Tenant A cannot insert a row with tenant B's `tenant_id` (RLS error)                                                 | Integration       | ✅     |
-| TC-1.2-07 | Tenant A cannot move its own row to tenant B                                                                         | Integration       | ✅     |
-| TC-1.2-08 | The tenant setting does not survive the transaction (pooled connection reuse)                                        | Integration       | ✅     |
-| TC-1.2-09 | A tenant id that is not a UUID is rejected before any SQL runs                                                       | Integration       | ✅     |
-| TC-1.2-10 | Branch code is unique within a tenant; two tenants may both have `MAIN`                                              | Integration       | ✅     |
-| TC-1.2-11 | Every table with a `tenant_id` column has RLS enabled and at least one policy (guard against new tables missing RLS) | Integration       | ✅     |
-| TC-1.2-12 | Many concurrent requests for tenants A and B each see only their own data                                            | Integration       | ✅     |
-| TC-1.2-13 | A user assigned to branch X sees only branch X's branch-scoped records; the owner sees all branches                  | Integration       | 📝     |
-| TC-1.2-14 | A `tenant_id` sent in a request body or query string is ignored; the session's tenant is used                        | Integration (API) | 📝     |
+| ID        | Test case                                                                                                            | Type              | Status                                                                                                                                                                                             |
+| --------- | -------------------------------------------------------------------------------------------------------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TC-1.2-01 | The app's database role is not a superuser and cannot bypass RLS                                                     | Integration       | ✅                                                                                                                                                                                                 |
+| TC-1.2-02 | With no tenant set, every tenant table returns zero rows                                                             | Integration       | ✅                                                                                                                                                                                                 |
+| TC-1.2-03 | Tenant A reads only its own rows in `tenants`, `branches`, `audit_log`                                               | Integration       | ✅                                                                                                                                                                                                 |
+| TC-1.2-04 | Tenant A cannot read tenant B's branch by id                                                                         | Integration       | ✅                                                                                                                                                                                                 |
+| TC-1.2-05 | Tenant A cannot update or delete tenant B's rows (0 rows affected, B unchanged)                                      | Integration       | ✅                                                                                                                                                                                                 |
+| TC-1.2-06 | Tenant A cannot insert a row with tenant B's `tenant_id` (RLS error)                                                 | Integration       | ✅                                                                                                                                                                                                 |
+| TC-1.2-07 | Tenant A cannot move its own row to tenant B                                                                         | Integration       | ✅                                                                                                                                                                                                 |
+| TC-1.2-08 | The tenant setting does not survive the transaction (pooled connection reuse)                                        | Integration       | ✅                                                                                                                                                                                                 |
+| TC-1.2-09 | A tenant id that is not a UUID is rejected before any SQL runs                                                       | Integration       | ✅                                                                                                                                                                                                 |
+| TC-1.2-10 | Branch code is unique within a tenant; two tenants may both have `MAIN`                                              | Integration       | ✅                                                                                                                                                                                                 |
+| TC-1.2-11 | Every table with a `tenant_id` column has RLS enabled and at least one policy (guard against new tables missing RLS) | Integration       | ✅                                                                                                                                                                                                 |
+| TC-1.2-12 | Many concurrent requests for tenants A and B each see only their own data                                            | Integration       | ✅                                                                                                                                                                                                 |
+| TC-1.2-13 | A user assigned to branch X sees only branch X's branch-scoped records; the owner sees all branches                  | Integration       | 🟡 scope rules ✅ ([permissions.test.ts](../packages/core/src/permissions.test.ts), [auth.test.ts](../apps/web/src/server/auth/auth.test.ts)); filtering of branch data 📝 as branch tables arrive |
+| TC-1.2-14 | A `tenant_id` sent in a request body or query string is ignored; the session's tenant is used                        | Integration (API) | 🟡 by design: `withAuth` takes the tenant from the session; test 📝 with the first write API                                                                                                       |
 
 ## 1.3 Login, roles and permissions (STF-01, NFR-05)
 
-| ID        | Test case                                                                                             | Type              | Status                                                                   |
-| --------- | ----------------------------------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------ |
-| TC-1.3-01 | Login with correct email and password succeeds and lands on the dashboard                             | E2E               | 📝                                                                       |
-| TC-1.3-02 | Wrong password or unknown user shows the same generic error (no account enumeration)                  | E2E               | 📝                                                                       |
-| TC-1.3-03 | Passwords are stored hashed; no plaintext password in the database                                    | Integration       | 📝                                                                       |
-| TC-1.3-04 | OTP login: OTP is sent through the messaging module, works once, expires after the set time           | Integration       | 📝                                                                       |
-| TC-1.3-05 | OTP abuse limits: resend cooldown and lock after too many wrong attempts                              | Integration       | 📝                                                                       |
-| TC-1.3-06 | Session ends after the inactivity timeout; logout invalidates the session on the server               | E2E               | 📝                                                                       |
-| TC-1.3-07 | A user who is not a member of a tenant gets 403 on that tenant's API                                  | Integration (API) | 📝                                                                       |
-| TC-1.3-08 | Owner adds a staff user, assigns a role and one or more branches                                      | E2E               | 📝                                                                       |
-| TC-1.3-09 | Sales Executive never receives cost price or margin fields in API responses                           | Integration (API) | 📝                                                                       |
-| TC-1.3-10 | Technician sees only the job cards assigned to them                                                   | Integration (API) | 📝                                                                       |
-| TC-1.3-11 | Permission checks are enforced on the server (direct API call returns 403), not only hidden in the UI | Integration (API) | 📝                                                                       |
-| TC-1.3-12 | A deactivated user cannot log in and their existing sessions are revoked                              | Integration       | 📝                                                                       |
-| TC-1.3-13 | Phone numbers in OTP logs are masked                                                                  | Unit              | ✅ (logger redaction, [log.test.ts](../packages/shared/src/log.test.ts)) |
+| ID        | Test case                                                                                             | Type              | Status                                                                                                                                                                         |
+| --------- | ----------------------------------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| TC-1.3-01 | Login with correct email and password succeeds and lands on the dashboard                             | E2E               | ✅ ([auth.test.ts](../apps/web/src/server/auth/auth.test.ts), [login.spec.ts](../apps/web/e2e/login.spec.ts))                                                                  |
+| TC-1.3-02 | Wrong password or unknown user shows the same generic error (no account enumeration)                  | E2E               | ✅ ([auth.test.ts](../apps/web/src/server/auth/auth.test.ts), [login.spec.ts](../apps/web/e2e/login.spec.ts))                                                                  |
+| TC-1.3-03 | Passwords are stored hashed; no plaintext password in the database                                    | Integration       | ✅ ([auth.test.ts](../apps/web/src/server/auth/auth.test.ts))                                                                                                                  |
+| TC-1.3-04 | OTP login: OTP is sent through the messaging module, works once, expires after the set time           | Integration       | ✅ ([auth.test.ts](../apps/web/src/server/auth/auth.test.ts), [login.spec.ts](../apps/web/e2e/login.spec.ts); live MSG91 check 📝)                                             |
+| TC-1.3-05 | OTP abuse limits: resend cooldown and lock after too many wrong attempts                              | Integration       | ✅ ([auth.test.ts](../apps/web/src/server/auth/auth.test.ts))                                                                                                                  |
+| TC-1.3-06 | Session ends after the inactivity timeout; logout invalidates the session on the server               | E2E               | ✅ sign-out ([auth.test.ts](../apps/web/src/server/auth/auth.test.ts), [login.spec.ts](../apps/web/e2e/login.spec.ts)); inactivity timeout is Better Auth config               |
+| TC-1.3-07 | A user who is not a member of a tenant gets 403 on that tenant's API                                  | Integration (API) | ✅ ([auth.test.ts](../apps/web/src/server/auth/auth.test.ts))                                                                                                                  |
+| TC-1.3-08 | Owner adds a staff user, assigns a role and one or more branches                                      | E2E               | ✅ ([auth.test.ts](../apps/web/src/server/auth/auth.test.ts), [login.spec.ts](../apps/web/e2e/login.spec.ts))                                                                  |
+| TC-1.3-09 | Sales Executive never receives cost price or margin fields in API responses                           | Integration (API) | 🟡 permission rule ✅ ([permissions.test.ts](../packages/core/src/permissions.test.ts)); response filtering 📝 when cost fields exist (1.6, 1.8)                               |
+| TC-1.3-10 | Technician sees only the job cards assigned to them                                                   | Integration (API) | 🟡 permission rule ✅ ([permissions.test.ts](../packages/core/src/permissions.test.ts)); job card filtering 📝 (1.17)                                                          |
+| TC-1.3-11 | Permission checks are enforced on the server (direct API call returns 403), not only hidden in the UI | Integration (API) | ✅ ([permissions.test.ts](../packages/core/src/permissions.test.ts), [auth.test.ts](../apps/web/src/server/auth/auth.test.ts), [login.spec.ts](../apps/web/e2e/login.spec.ts)) |
+| TC-1.3-12 | A deactivated user cannot log in and their existing sessions are revoked                              | Integration       | ✅ ([auth.test.ts](../apps/web/src/server/auth/auth.test.ts))                                                                                                                  |
+| TC-1.3-13 | Phone numbers in OTP logs are masked                                                                  | Unit              | ✅ (logger redaction, [log.test.ts](../packages/shared/src/log.test.ts))                                                                                                       |
 
 ## 1.4 Showroom settings (STF-05)
 
-| ID        | Test case                                                                                                                | Type              | Status                                                                     |
-| --------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------- | -------------------------------------------------------------------------- |
-| TC-1.4-01 | Owner saves name, legal name, GSTIN, address, logo, invoice prefix and terms; values persist                             | E2E               | 📝                                                                         |
-| TC-1.4-02 | GSTIN with a wrong format is rejected                                                                                    | Unit              | ✅ ([schemas.test.ts](../packages/shared/src/schemas.test.ts))             |
-| TC-1.4-03 | GSTIN with a wrong check digit is rejected                                                                               | Unit              | 📝                                                                         |
-| TC-1.4-04 | GSTIN state code must match the branch's state                                                                           | Unit              | 📝                                                                         |
-| TC-1.4-05 | Invoice prefix allows only letters, digits, `-` and `/`, and keeps the full number within 16 characters                  | Unit              | ✅ ([invoice-number.test.ts](../packages/core/src/invoice-number.test.ts)) |
-| TC-1.4-06 | Changing the prefix mid-year follows the agreed rule (see open decisions in task.md) and never renumbers issued invoices | Integration       | 📝                                                                         |
-| TC-1.4-07 | Logo upload accepts PNG/JPG/WebP up to 1 MB; it is stored in object storage and shown on the invoice PDF                 | Integration       | 📝                                                                         |
-| TC-1.4-08 | Roles other than Owner get 403 when changing settings                                                                    | Integration (API) | 📝                                                                         |
-| TC-1.4-09 | A settings change writes an audit entry with before and after values                                                     | Integration       | 📝                                                                         |
+| ID        | Test case                                                                                                                | Type              | Status                                                                                                         |
+| --------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------- | -------------------------------------------------------------------------------------------------------------- |
+| TC-1.4-01 | Owner saves name, legal name, GSTIN, address, logo, invoice prefix and terms; values persist                             | E2E               | 📝                                                                                                             |
+| TC-1.4-02 | GSTIN with a wrong format is rejected                                                                                    | Unit              | ✅ ([schemas.test.ts](../packages/shared/src/schemas.test.ts))                                                 |
+| TC-1.4-03 | GSTIN with a wrong check digit is rejected                                                                               | Unit              | 📝                                                                                                             |
+| TC-1.4-04 | GSTIN state code must match the branch's state                                                                           | Unit              | 📝                                                                                                             |
+| TC-1.4-05 | Invoice prefix allows only letters, digits, `-` and `/`, and keeps the full number within 16 characters                  | Unit              | ✅ ([invoice-number.test.ts](../packages/core/src/invoice-number.test.ts))                                     |
+| TC-1.4-06 | Changing the prefix mid-year follows the agreed rule (see open decisions in task.md) and never renumbers issued invoices | Integration       | 📝                                                                                                             |
+| TC-1.4-07 | Logo upload accepts PNG/JPG/WebP up to 1 MB; it is stored in object storage and shown on the invoice PDF                 | Integration       | 📝                                                                                                             |
+| TC-1.4-08 | Roles other than Owner get 403 when changing settings                                                                    | Integration (API) | 🟡 permission rule ✅ ([permissions.test.ts](../packages/core/src/permissions.test.ts)); settings API 📝 (1.4) |
+| TC-1.4-09 | A settings change writes an audit entry with before and after values                                                     | Integration       | 📝                                                                                                             |
 
 ## 1.5 Audit log (NFR-08)
 
@@ -211,16 +211,16 @@ Domain rules automated in [packages/core](../packages/core/src/).
 
 ## 1.14 Payments, credit notes and returns (SAL-05, SAL-13)
 
-| ID         | Test case                                                                                                | Type              | Status         |
-| ---------- | -------------------------------------------------------------------------------------------------------- | ----------------- | -------------- |
-| TC-1.14-01 | Record payments by cash, UPI, card, bank transfer and finance                                            | E2E               | 📝             |
-| TC-1.14-02 | Balance due = invoice total − payments − credit notes; status unpaid, part-paid or paid                  | Unit              | 📝 (`it.todo`) |
-| TC-1.14-03 | A payment larger than the balance due is rejected                                                        | Unit              | 📝 (`it.todo`) |
-| TC-1.14-04 | A booking advance is applied against the final invoice                                                   | Integration       | 📝             |
-| TC-1.14-05 | A credit note references the original invoice, has its own gap-free series and reverses GST line by line | Integration       | 📝             |
-| TC-1.14-06 | Credit notes cannot exceed the invoice's value not already credited                                      | Unit              | 📝 (`it.todo`) |
-| TC-1.14-07 | A sales return puts the bike back in stock or parts back via a stock movement                            | Integration       | 📝             |
-| TC-1.14-08 | Only Owner and Accountant can edit or delete a payment, and it is audited                                | Integration (API) | 📝             |
+| ID         | Test case                                                                                                | Type              | Status                                                                                                          |
+| ---------- | -------------------------------------------------------------------------------------------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------- |
+| TC-1.14-01 | Record payments by cash, UPI, card, bank transfer and finance                                            | E2E               | 📝                                                                                                              |
+| TC-1.14-02 | Balance due = invoice total − payments − credit notes; status unpaid, part-paid or paid                  | Unit              | 📝 (`it.todo`)                                                                                                  |
+| TC-1.14-03 | A payment larger than the balance due is rejected                                                        | Unit              | 📝 (`it.todo`)                                                                                                  |
+| TC-1.14-04 | A booking advance is applied against the final invoice                                                   | Integration       | 📝                                                                                                              |
+| TC-1.14-05 | A credit note references the original invoice, has its own gap-free series and reverses GST line by line | Integration       | 📝                                                                                                              |
+| TC-1.14-06 | Credit notes cannot exceed the invoice's value not already credited                                      | Unit              | 📝 (`it.todo`)                                                                                                  |
+| TC-1.14-07 | A sales return puts the bike back in stock or parts back via a stock movement                            | Integration       | 📝                                                                                                              |
+| TC-1.14-08 | Only Owner and Accountant can edit or delete a payment, and it is audited                                | Integration (API) | 🟡 permission rule ✅ ([permissions.test.ts](../packages/core/src/permissions.test.ts)); payments API 📝 (1.14) |
 
 ## 1.15 Invoice PDF and WhatsApp (SAL-06)
 

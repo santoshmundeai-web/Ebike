@@ -3,7 +3,7 @@ import { eq, sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { writeAudit } from './audit';
 import { createDb, withTenant, type Database } from './client';
-import { auditLog, branches, tenants } from './schema';
+import { auditLog, branches, tenants, user, userBranches } from './schema';
 
 /**
  * Proves tenant A cannot read or write tenant B's rows (CLAUDE.md section 5).
@@ -46,6 +46,9 @@ describe.skipIf(!url)('tenant isolation (RLS)', () => {
         entityType: 'branch',
         entityId: branch!.id,
       });
+      const userId = randomUUID();
+      await tx.insert(user).values({ id: userId, name: 'Staff', email: `${userId}@test.invalid` });
+      await tx.insert(userBranches).values({ tenantId, userId, branchId: branch!.id });
       return branch!.id;
     });
   }
@@ -71,12 +74,14 @@ describe.skipIf(!url)('tenant isolation (RLS)', () => {
     expect(await db.select().from(tenants)).toEqual([]);
     expect(await db.select().from(branches)).toEqual([]);
     expect(await db.select().from(auditLog)).toEqual([]);
+    expect(await db.select().from(userBranches)).toEqual([]);
   });
 
   it.each([
     ['tenants', () => tenants, () => tenants.id],
     ['branches', () => branches, () => branches.tenantId],
     ['audit_log', () => auditLog, () => auditLog.tenantId],
+    ['user_branches', () => userBranches, () => userBranches.tenantId],
   ] as const)(
     'TC-1.2-03 / TC-1.5-03 %s: reads only the current tenant',
     async (_name, table, tenantColumn) => {
@@ -180,8 +185,19 @@ describe.skipIf(!url)('tenant isolation (RLS)', () => {
     await expect(withTenant(db, "x' or '1'='1", async () => undefined)).rejects.toThrow(/UUID/);
   });
 
-  it('TC-1.2-11 every table with a tenant column has RLS enabled and a policy', async () => {
-    // Guards against a new table being added without RLS. `tenants` is keyed on `id`.
+  it('TC-1.2-11 every table is RLS-protected unless it is a listed platform table', async () => {
+    // Guards against a new table being added without RLS. Platform tables hold no tenant data
+    // of their own (auth: a user can belong to several tenants) and are reached only via the
+    // auth layer; see ADR 003. Adding a table here needs a review.
+    const PLATFORM_TABLES = [
+      'account',
+      'invitation',
+      'member',
+      'organization',
+      'session',
+      'user',
+      'verification',
+    ];
     const rows = await db.execute<{ table: string; rls: boolean; policies: number }>(sql`
       select c.relname as table,
              c.relrowsecurity as rls,
@@ -189,17 +205,16 @@ describe.skipIf(!url)('tenant isolation (RLS)', () => {
                where p.schemaname = 'public' and p.tablename = c.relname) as policies
         from pg_class c
         join pg_namespace n on n.oid = c.relnamespace
-       where n.nspname = 'public'
-         and c.relkind in ('r', 'p')
-         and (c.relname = 'tenants'
-              or exists (select 1 from pg_attribute a
-                          where a.attrelid = c.oid and a.attname = 'tenant_id' and not a.attisdropped))
+       where n.nspname = 'public' and c.relkind in ('r', 'p')
     `);
     const tables = [...rows];
     expect(tables.map((t) => t.table)).toEqual(
-      expect.arrayContaining(['tenants', 'branches', 'audit_log']),
+      expect.arrayContaining(['tenants', 'branches', 'audit_log', 'user_branches']),
     );
-    const unprotected = tables.filter((t) => !t.rls || t.policies < 1).map((t) => t.table);
+    const unprotected = tables
+      .filter((t) => !PLATFORM_TABLES.includes(t.table))
+      .filter((t) => !t.rls || t.policies < 1)
+      .map((t) => t.table);
     expect(unprotected).toEqual([]);
   });
 

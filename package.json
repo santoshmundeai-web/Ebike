@@ -12,7 +12,7 @@
     "db:up": "docker compose up -d postgres",
     "db:generate": "pnpm --filter @ebike/db generate",
     "db:migrate": "pnpm --filter @ebike/db migrate",
-    "db:seed": "pnpm --filter @ebike/db seed",
+    "db:seed": "pnpm --filter @ebike/web seed",
     "test": "vitest run",
     "test:e2e": "pnpm --filter @ebike/web test:e2e",
     "lint": "eslint .",

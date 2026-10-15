@@ -1,14 +1,19 @@
 import { createLogger, jobs, type JobName, type JobPayload } from '@ebike/shared';
 import { PgBoss } from 'pg-boss';
 import { env } from './env';
+import { createSmsProvider } from './messaging/sms';
 
 const log = createLogger({ service: 'worker' });
+const sms = createSmsProvider(env, log);
 
 type Handler<N extends JobName> = (data: JobPayload<N>) => Promise<void>;
 
 const handlers: { [N in JobName]: Handler<N> } = {
   'system.heartbeat': async () => {
     log.info('heartbeat');
+  },
+  'auth.sendOtp': async ({ phoneNumber, code }) => {
+    await sms.sendOtp(phoneNumber, code);
   },
 };
 
@@ -22,18 +27,21 @@ boss.on('error', (error) => log.error('pg-boss error', { error }));
 
 await boss.start();
 
-for (const name of Object.keys(handlers) as JobName[]) {
+async function register<N extends JobName>(name: N) {
+  const handler: Handler<N> = handlers[name];
   await boss.createQueue(name);
   await boss.work(name, async (batch) => {
     for (const job of batch) {
-      await handlers[name](jobs[name].parse(job.data));
+      await handler(jobs[name].parse(job.data) as JobPayload<N>);
     }
   });
   const cron = schedules[name];
   if (cron) await boss.schedule(name, cron, {}, { tz: 'Asia/Kolkata' });
 }
 
-log.info('worker started', { queues: Object.keys(handlers) });
+for (const name of Object.keys(handlers) as JobName[]) await register(name);
+
+log.info('worker started', { queues: Object.keys(handlers), sms: sms.name });
 
 async function shutdown(signal: string) {
   log.info('worker stopping', { signal });

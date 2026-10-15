@@ -4,7 +4,7 @@ Tracks progress against the [task plan](docs/EBike%20Dealer%20Management%20Syste
 Requirement IDs refer to the [requirements](docs/EBike%20Dealer%20Management%20System%20–%20Requirements.md).
 Test cases for every task are in [docs/test-cases.md](docs/test-cases.md).
 
-Last updated: 2026-10-15
+Last updated: 2026-10-16
 
 **Status key:** ✅ Done · 🟡 In progress · ⬜ Not started · ⛔ Blocked (waiting on a decision or input)
 
@@ -13,10 +13,10 @@ Last updated: 2026-10-15
 | Phase                        | Done | In progress | Not started | Blocked |
 | ---------------------------- | ---- | ----------- | ----------- | ------- |
 | Phase 0: Setup and decisions | 1    | 2           | 6           | 0       |
-| Phase 1: MVP at our showroom | 0    | 4           | 23          | 0       |
+| Phase 1: MVP at our showroom | 1    | 4           | 22          | 0       |
 
-**Now working on:** 1.1 project setup (CI and deployment still to do) and 1.2 tenant and branch model (branch scoping still to do).
-**Next up:** 1.3 login and roles, then 1.4 settings and 1.6 model catalogue.
+**Now working on:** 1.3 login and roles (built; live OTP waits for the MSG91 account) and 1.1 project setup (deployment still to do).
+**Next up:** 1.4 showroom settings, then 1.6 model catalogue.
 
 ## Phase 0: Setup and decisions
 
@@ -36,34 +36,34 @@ Last updated: 2026-10-15
 
 Gate 1: the system is used daily at our showroom for 4 weeks with no paper backup.
 
-| #    | Task                                                                                    | Requirement                    | Size | Status         |
-| ---- | --------------------------------------------------------------------------------------- | ------------------------------ | ---- | -------------- |
-| 1.1  | Project setup: code repository, environments (dev, staging, live), automatic deployment | –                              | M    | 🟡 In progress |
-| 1.2  | Tenant and branch data model; tenant isolation tests                                    | SAAS-01, SAAS-02, NFR-06       | L    | 🟡 In progress |
-| 1.3  | Login with password and OTP; roles and permissions                                      | STF-01, NFR-05                 | M    | ⬜ Not started |
-| 1.4  | Showroom settings: logo, GSTIN, address, invoice prefix, terms                          | STF-05                         | S    | ⬜ Not started |
-| 1.5  | Audit log for invoices, payments, stock and settings                                    | NFR-08                         | M    | 🟡 In progress |
-| 1.6  | Model catalogue: brand, model, variant, colour, price, tax rate                         | INV-01                         | M    | ⬜ Not started |
-| 1.7  | Bike units by chassis number with serials and status                                    | INV-02, INV-03                 | M    | ⬜ Not started |
-| 1.8  | Spare parts and accessories with stock levels and reorder alerts                        | INV-04, INV-05                 | M    | ⬜ Not started |
-| 1.9  | Purchase entries from suppliers                                                         | INV-06                         | M    | ⬜ Not started |
-| 1.10 | Excel/CSV import for models, stock and customers                                        | INV-07                         | M    | ⬜ Not started |
-| 1.11 | Customer records and search by name or phone                                            | SAL-01                         | S    | ⬜ Not started |
-| 1.12 | Quotation and booking with advance payment                                              | SAL-02, SAL-03                 | M    | ⬜ Not started |
-| 1.13 | GST tax invoice with sequential numbering per financial year                            | SAL-04                         | L    | 🟡 In progress |
-| 1.14 | Payments, part-payments, credit notes and returns                                       | SAL-05, SAL-13                 | M    | ⬜ Not started |
-| 1.15 | Invoice PDF and share on WhatsApp                                                       | SAL-06                         | S    | ⬜ Not started |
-| 1.16 | Job card creation with photos and service type                                          | SRV-01                         | M    | ⬜ Not started |
-| 1.17 | Technician assignment and job status flow                                               | SRV-02                         | S    | ⬜ Not started |
-| 1.18 | Parts and labour on job card; automatic stock deduction                                 | SRV-03                         | M    | ⬜ Not started |
-| 1.19 | Service invoice with GST                                                                | SRV-05                         | S    | ⬜ Not started |
-| 1.20 | Service history per bike; search by chassis number or phone                             | SRV-06                         | S    | ⬜ Not started |
-| 1.21 | Free-service schedule and component warranty expiry per bike                            | SRV-07, SRV-10                 | M    | ⬜ Not started |
-| 1.22 | Messaging integration and automatic service-due reminders                               | SRV-08                         | M    | ⬜ Not started |
-| 1.23 | Owner dashboard: sales, collections, open jobs, low stock                               | FIN-01                         | M    | ⬜ Not started |
-| 1.24 | Reports: sales, service revenue, outstanding; export to Excel/PDF                       | FIN-02, FIN-03, FIN-04, FIN-08 | M    | ⬜ Not started |
-| 1.25 | Daily backups and restore test                                                          | NFR-07                         | S    | ⬜ Not started |
-| 1.26 | Load our showroom's data, train staff, run 4-week pilot                                 | –                              | M    | ⬜ Not started |
+| #    | Task                                                                                                   | Requirement                    | Size | Status         |
+| ---- | ------------------------------------------------------------------------------------------------------ | ------------------------------ | ---- | -------------- |
+| 1.1  | Project setup: code repository, environments (dev, staging, live), automatic deployment                | –                              | M    | 🟡 In progress |
+| 1.2  | Tenant and branch data model; tenant isolation tests                                                   | SAAS-01, SAAS-02, NFR-06       | L    | ✅ Done        |
+| 1.3  | Login with password and OTP; roles and permissions                                                     | STF-01, NFR-05                 | M    | 🟡 In progress |
+| 1.4  | Showroom settings: logo, GSTIN, address, invoice prefix, terms                                         | STF-05                         | S    | ⬜ Not started |
+| 1.5  | Audit log for invoices, payments, stock and settings                                                   | NFR-08                         | M    | 🟡 In progress |
+| 1.6  | Model catalogue: brand, model, variant, colour, price, tax rate                                        | INV-01                         | M    | ⬜ Not started |
+| 1.7  | Bike units by chassis number with serials and status                                                   | INV-02, INV-03                 | M    | ⬜ Not started |
+| 1.8  | Spare parts and accessories with stock levels and reorder alerts                                       | INV-04, INV-05                 | M    | ⬜ Not started |
+| 1.9  | Purchase entries from suppliers                                                                        | INV-06                         | M    | ⬜ Not started |
+| 1.10 | Excel/CSV import for models, stock and customers                                                       | INV-07                         | M    | ⬜ Not started |
+| 1.11 | Customer records and search by name or phone                                                           | SAL-01                         | S    | ⬜ Not started |
+| 1.12 | Quotation and booking with advance payment                                                             | SAL-02, SAL-03                 | M    | ⬜ Not started |
+| 1.13 | GST tax invoice with sequential numbering per financial year                                           | SAL-04                         | L    | 🟡 In progress |
+| 1.14 | Payments, part-payments, credit notes and returns                                                      | SAL-05, SAL-13                 | M    | ⬜ Not started |
+| 1.15 | Invoice PDF and share on WhatsApp                                                                      | SAL-06                         | S    | ⬜ Not started |
+| 1.16 | Job card creation with photos and service type                                                         | SRV-01                         | M    | ⬜ Not started |
+| 1.17 | Technician assignment and job status flow                                                              | SRV-02                         | S    | ⬜ Not started |
+| 1.18 | Parts and labour on job card; automatic stock deduction                                                | SRV-03                         | M    | ⬜ Not started |
+| 1.19 | Service invoice with GST                                                                               | SRV-05                         | S    | ⬜ Not started |
+| 1.20 | Service history per bike; search by chassis number or phone                                            | SRV-06                         | S    | ⬜ Not started |
+| 1.21 | Free-service schedule and component warranty expiry per bike                                           | SRV-07, SRV-10                 | M    | ⬜ Not started |
+| 1.22 | Messaging integration and automatic service-due reminders                                              | SRV-08                         | M    | ⬜ Not started |
+| 1.23 | Owner dashboard: sales, collections, open jobs, low stock                                              | FIN-01                         | M    | ⬜ Not started |
+| 1.24 | Reports: sales, service revenue, outstanding; export to Excel/PDF                                      | FIN-02, FIN-03, FIN-04, FIN-08 | M    | ⬜ Not started |
+| 1.25 | Daily backups and restore test                                                                         | NFR-07                         | S    | ⬜ Not started |
+| 1.26 | Load our showroom's data, train staff, run 4-week pilot                                                | –                              | M    | ⬜ Not started |
 | 1.27 | User guide with screenshots for Phase 1 (after Gate 1 is approved) — _added, not in the original plan_ | NFR-12                         | S    | ⬜ Not started |
 
 Every phase ends with a user guide (see CLAUDE.md section 8, "User guide after each phase"):
@@ -82,33 +82,37 @@ Done:
 - [x] Next.js web app builds; `/api/v1/health` checks the database
 - [x] Worker starts pg-boss and runs a scheduled heartbeat job
 - [x] English and Hindi message files (next-intl); installable PWA manifest
+- [x] Code repository on GitHub: https://github.com/santoshmundeai-web/Ebike (`main`)
+- [x] CI (GitHub Actions): lint, typecheck, unit/integration tests with Postgres, then end-to-end tests
+- [x] Playwright set up for end-to-end tests at phone size (`pnpm test:e2e`)
 
 To do:
 
-- [x] Code repository on GitHub: https://github.com/santoshmundeai-web/Ebike (`main`)
-- [ ] CI: run lint, typecheck and tests (with Postgres) on every push and pull request
 - [ ] Dockerfiles for web and worker
 - [ ] Staging and live environments: managed Postgres in an Indian region, object storage, secrets
 - [ ] Automatic deployment: staging on merge to `main`, live after approval
 - [ ] Sentry error reporting and structured logs in both apps
-- [ ] Playwright set up for end-to-end tests (`pnpm test:e2e`)
 - [ ] Playwright screenshot script for the user guides (`pnpm docs:screenshots`), using the demo tenant
 
-### 1.2 Tenant and branch data model — 🟡 In progress
+### 1.3 Login, roles and permissions — 🟡 In progress
+
+Design: [ADR 003](docs/adr/003-auth-tenants-and-roles.md).
 
 Done:
 
-- [x] `tenants` and `branches` tables; branch code unique per tenant
-- [x] Row-level security on every tenant-owned table; app connects as a role subject to RLS
-- [x] `withTenant()` sets the tenant per transaction only
-- [x] Isolation tests: read, update, delete, insert and moving rows across tenants are all blocked
+- [x] Better Auth: email + password, and phone + OTP (6 digits, 5 minutes, 3 attempts, rate-limited)
+- [x] OTP sent only to active staff numbers, through the job queue and the worker's SMS module
+- [x] Session ends after 12 hours of inactivity (configurable); sign-out ends it on the server
+- [x] Six roles with a permission matrix from the requirements; checked on the server for every API route and server action
+- [x] Owner adds staff (name, mobile, optional email/password, role, branches) and removes access; both audited
+- [x] Screens: login (OTP or password, English/Hindi), dashboard, staff management — mobile first
+- [x] Demo seed: one showroom, two branches, one user per role (`pnpm db:seed`)
+- [x] Tests: 15 integration, 12 permission unit tests, 8 end-to-end in a phone-size browser
 
 To do:
 
-- [ ] User-to-branch membership (a user can belong to one or more branches)
-- [ ] Branch scoping: branch-level users see only their branches' data (SAAS-02)
-- [ ] Tenant provisioning service used by setup and later by signup (SAAS-03)
-- [ ] API layer takes the tenant only from the session, never from the request
+- [ ] Live OTP check with the MSG91 account and DLT template (depends on Phase 0 messaging item)
+- [ ] Owner can change a staff member's role or branches (today: remove and add again)
 
 ### 1.5 Audit log — 🟡 In progress
 

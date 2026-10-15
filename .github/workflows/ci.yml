@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: ebike
+          POSTGRES_PASSWORD: ebike
+          POSTGRES_DB: ebike
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ebike"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # Local-only CI database; not secrets.
+      DATABASE_URL: postgres://ebike_app:ebike_app@localhost:5432/ebike
+      DATABASE_URL_OWNER: postgres://ebike:ebike@localhost:5432/ebike
+      BETTER_AUTH_SECRET: ci-only-secret-not-used-anywhere-else-0123456789
+      BETTER_AUTH_URL: http://localhost:3000
+      VITE_CONFIG_NATIVE_IGNORE_WARNING: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Create database roles
+        run: psql postgres://ebike:ebike@localhost:5432/ebike -v ON_ERROR_STOP=1 -f packages/db/init/01-roles.sql
+      - run: pnpm db:migrate
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - name: Seed demo data for end-to-end tests
+        run: pnpm db:seed
+      - name: Install Chromium for Playwright
+        run: pnpm --filter @ebike/web exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
+      - name: Upload Playwright traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: apps/web/test-results
+          retention-days: 7

@@ -4,7 +4,90 @@
     "tagline": "Sales, service and stock for your e-bike showroom",
     "description": "Dealer management for electric two-wheeler showrooms"
   },
-  "home": {
-    "comingSoon": "We are setting things up. Sign-in will be available soon."
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "hi": "हिंदी"
+  },
+  "auth": {
+    "title": "Sign in",
+    "subtitle": "Use your phone number or email to sign in to your showroom.",
+    "tabOtp": "Phone OTP",
+    "tabPassword": "Email & password",
+    "phone": "Mobile number",
+    "phonePlaceholder": "98765 43210",
+    "sendOtp": "Send OTP",
+    "otpSent": "We sent a 6-digit code to {phone}.",
+    "code": "6-digit code",
+    "verify": "Verify and sign in",
+    "changeNumber": "Change number",
+    "resend": "Send a new code",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "working": "Please wait…",
+    "errors": {
+      "invalidCredentials": "Email or password is incorrect.",
+      "accountDisabled": "Your account is not active. Please contact your showroom owner.",
+      "invalidPhone": "Enter a valid 10-digit Indian mobile number.",
+      "invalidCode": "The code is incorrect or has expired.",
+      "tooManyAttempts": "Too many attempts. Please wait a minute and try again.",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "staff": "Staff",
+    "signOut": "Sign out"
+  },
+  "roles": {
+    "owner": "Owner",
+    "branch_manager": "Branch Manager",
+    "sales_executive": "Sales Executive",
+    "service_advisor": "Service Advisor",
+    "technician": "Technician",
+    "accountant": "Accountant"
+  },
+  "dashboard": {
+    "welcome": "Welcome, {name}",
+    "role": "Your role",
+    "branches": "Your branches",
+    "allBranches": "All branches",
+    "comingSoon": "Sales, stock and service screens are coming next."
+  },
+  "staff": {
+    "title": "Staff",
+    "subtitle": "Add the people who work at your showroom and choose what they can do.",
+    "addTitle": "Add staff",
+    "name": "Full name",
+    "email": "Email (optional)",
+    "phone": "Mobile number",
+    "role": "Role",
+    "branches": "Branches",
+    "password": "Password (optional)",
+    "passwordHint": "Without a password, the person signs in with an OTP sent to their phone.",
+    "add": "Add staff",
+    "added": "{name} has been added. They can now sign in.",
+    "you": "You",
+    "deactivate": "Remove access",
+    "deactivated": "Access removed. The person has been signed out.",
+    "count": "{count, plural, one {# person} other {# people}}",
+    "errors": {
+      "PHONE_IN_USE": "This mobile number already belongs to a user.",
+      "EMAIL_IN_USE": "This email already belongs to a user.",
+      "UNKNOWN_BRANCH": "Choose a branch from the list.",
+      "NOT_A_MEMBER": "This person is not part of your showroom.",
+      "CANNOT_DEACTIVATE_SELF": "You cannot remove your own access.",
+      "LAST_OWNER": "The showroom must keep at least one owner.",
+      "name_too_short": "Enter the full name.",
+      "invalid_email": "Enter a valid email or leave it empty.",
+      "invalid_mobile": "Enter a valid 10-digit Indian mobile number.",
+      "branch_required": "Choose at least one branch.",
+      "password_too_short": "Password must have at least 8 characters.",
+      "generic": "Could not save. Please check the details and try again."
+    }
+  },
+  "errors": {
+    "forbidden": "You do not have access to this page."
   }
 }

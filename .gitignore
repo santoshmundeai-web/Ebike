@@ -9,3 +9,5 @@ test-results/
 .env.local
 .env.*.local
 .DS_Store
+playwright/.cache/
+next-env.d.ts
