@@ -1,0 +1,15 @@
+# Local development services. Production uses a managed Postgres in an Indian region.
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ebike
+      POSTGRES_PASSWORD: ebike
+      POSTGRES_DB: ebike
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./packages/db/init:/docker-entrypoint-initdb.d:ro
+volumes:
+  pgdata:

@@ -1,0 +1,10 @@
+{
+  "app": {
+    "name": "EBike DMS",
+    "tagline": "Sales, service and stock for your e-bike showroom",
+    "description": "Dealer management for electric two-wheeler showrooms"
+  },
+  "home": {
+    "comingSoon": "We are setting things up. Sign-in will be available soon."
+  }
+}

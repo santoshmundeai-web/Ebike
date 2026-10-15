@@ -1,0 +1,34 @@
+{
+  "name": "ebike-dms",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter @ebike/web --filter @ebike/worker dev",
+    "build": "pnpm -r build",
+    "db:up": "docker compose up -d postgres",
+    "db:generate": "pnpm --filter @ebike/db generate",
+    "db:migrate": "pnpm --filter @ebike/db migrate",
+    "db:seed": "pnpm --filter @ebike/db seed",
+    "test": "vitest run",
+    "test:e2e": "pnpm --filter @ebike/web test:e2e",
+    "lint": "eslint .",
+    "typecheck": "pnpm -r typecheck",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@next/eslint-plugin-next": "^16.4.1",
+    "@types/node": "^26.6.5",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.2",
+    "vitest": "^5.0.4"
+  }
+}
