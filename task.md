@@ -85,7 +85,7 @@ Done:
 
 To do:
 
-- [ ] First commit and remote repository (GitHub or similar)
+- [x] Code repository on GitHub: https://github.com/santoshmundeai-web/Ebike (`main`)
 - [ ] CI: run lint, typecheck and tests (with Postgres) on every push and pull request
 - [ ] Dockerfiles for web and worker
 - [ ] Staging and live environments: managed Postgres in an Indian region, object storage, secrets
